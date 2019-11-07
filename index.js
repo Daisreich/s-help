@@ -1,13 +1,13 @@
 var io = require("socket.io-client")
-var socket = io("https://bonzi.dega.io/")
-socket.emit('login',{name:'b!help'})
+var socket = io("http://localhost:3000")
+socket.emit('login',{name:'s!help'})
 socket.on('reconnected',reconnected)
 var reconnected = function(){
-    var socket = io("https://bonzi.dega.io/")
-    socket.emit('login',{name:'b!help'})
+    var socket = io("http://localhost:3000")
+    socket.emit('login',{name:'s!help'})
     socket.on('talk',function(data){
         var text = data.text
-        if(text.startsWith('b!')){
+        if(text.startsWith('s!')){
             text = text.slice(2)
             var cmd = text.split(' ')[0]
             var oth = text.slice(cmd.length+1)
@@ -25,10 +25,10 @@ var cool = false;
 var sockets = []
 var commands = {
     help:function(){
-        return "<h3>Commands</h3>b!help, b!echo [text], b!join [user], b!burn, b!drunk [text], b!clickbait [text]"
+        return "<h2>s!help, a fork of b!help.</h2><h3>Commands:</h3>s!help, s!echo [text], s!join [user], s!burn, s!drunk [text], s!clickbait [text]"
     },
     echo(txt){
-        if(txt.startsWith('b!')){
+        if(txt.startsWith('s!')){
             return 'hahahaha nice joke lmao hahaha fuck you'
         }
         return txt
@@ -38,7 +38,7 @@ var commands = {
             return "On cooldown!"
         }else{
             if(sockets.length > 10) return "Too much users."
-            var sock = io("https://bonzi.dega.io/")
+            var sock = io("http://localhost:3000")
             sock.emit('login',{name:txt})
             sockets.push(sock)
             cool = true
@@ -57,7 +57,19 @@ var commands = {
         sockets = []
     },
     drunk(txt){
-        if(txt.startsWith('b!')){
+        if(txt.startsWith('s!')){
+             return 'hahahaha nice joke lmao hahaha fuck you'.split('').map(n=>{
+                if(Math.random()>0.5) return n.toUpperCase()
+                return n
+            }).join('')
+        }
+        return txt.toLowerCase().split('').map(n=>{
+            if(Math.random()>0.5) return n.toUpperCase()
+            return n
+        }).join('')
+    },
+    mock(txt){
+        if(txt.startsWith('s!')){
              return 'hahahaha nice joke lmao hahaha fuck you'.split('').map(n=>{
                 if(Math.random()>0.5) return n.toUpperCase()
                 return n
@@ -74,7 +86,7 @@ var commands = {
 }
 socket.on('talk',function(data){
     var text = data.text
-    if(text.startsWith('b!')){
+    if(text.startsWith('s!')){
         text = text.slice(2)
         var cmd = text.split(' ')[0]
         var oth = text.slice(cmd.length+1)
