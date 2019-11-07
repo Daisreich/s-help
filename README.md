@@ -1,2 +1,2 @@
 # b-help
-A simple bonzi bot.
+A simple BonziWORLD bot using a node.js server.
